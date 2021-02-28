@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
 import reducer from './reducers'
 import rootSaga from './sagas'
@@ -21,9 +22,17 @@ const store = createStore(
 // then run the saga
 sagaMiddleware.run(rootSaga)
 
+
+const client = new ApolloClient({
+  uri: 'https://rickandmortyapi.com/graphql',
+  cache: new InMemoryCache()
+});
+
 ReactDOM.render(
+  <ApolloProvider client={client}>
     <Provider store={store}>
       <App />
-    </Provider>,
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root')
 );
